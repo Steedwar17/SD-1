@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Coordinador 55223025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #e6e6e6;
+            color: #222;
+            font-size: 18px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #111;
+            font-size: 28px;
+        }
+
+        .metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #f5f5f5;
+            padding: 16px 18px;
+            border-radius: 9px;
+            border: 1px solid #ccc;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .card p {
+            margin: 6px 0;
+            font-size: 17px;
+            color: #333;
+        }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            background: #fdfdfd;
+            font-size: 18px;
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #2e2e2e;
+            color: #f0f0f0;
+            padding: 14px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 14px;
+            border: 1px solid #d0d0d0;
+        }
+
+        tr:nth-child(even) {
+            background: #f0f0f0;
+        }
+
+        .activo {
+            color: #1f7a1f;
+            font-weight: 600;
+        }
+
+        .inactivo {
+            color: #aa0000;
+            font-weight: 600;
+        }
+
+        .error {
+            color: #aa0000;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<h1>Coordinador 55223025</h1>
+<div id="mensaje-error" class="error"></div>
+<div class="metrics">
+    <div class="card">
+        <h3>Servidores</h3>
+        <p>Total de servidores: <span id="total">0</span></p>
+        <p>Servidores activos: <span id="activos">0</span></p>
+    </div>
+    <div class="card">
+        <h3>Fallas</h3>
+        <p>Total de timeouts: <span id="timeouts">0</span></p>
+    </div>
+    <div class="card">
+        <h3>Coordinador 2.0</h3>
+        <p>Timestamp actual:<br><span id="hora">-</span></p>
+    </div>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>URL Pública</th>
+            <th>Último Pulso</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody id="tabla-servidores"></tbody>
+</table>
+<script>
+    const tiempoLimite = 5000; 
+    async function actualizarPantalla() {
+        try {
+
+            const respuestaMetricas = await fetch('/metrics');
+            const datosMetricas = await respuestaMetricas.json();
+
+            document.getElementById('total').innerText = datosMetricas.totalServers;
+            document.getElementById('activos').innerText = datosMetricas.currentActive;
+            document.getElementById('timeouts').innerText = datosMetricas.totalTimeouts;
+            document.getElementById('hora').innerText = datosMetricas.timestamp;
+
+            const respuestaServidores = await fetch('/servers');
+            const datosServidores = await respuestaServidores.json();
+
+            const cuerpoTabla = document.getElementById('tabla-servidores');
+            cuerpoTabla.innerHTML = '';
+
+            const tiempoActual = Date.now();
+
+            Object.values(datosServidores).forEach(function(servidor) {
+
+                const tiempoSinPulso = tiempoActual - servidor.lastPulse;
+                const estaActivo = tiempoSinPulso < tiempoLimite;
+
+                const fila = document.createElement('tr');
+
+                fila.innerHTML = `
+                    <td>${servidor.id}</td>
+                    <td>${servidor.url}</td>
+                    <td>${tiempoSinPulso} ms</td>
+                    <td class="${estaActivo ? 'activo' : 'inactivo'}">
+                        ${estaActivo ? 'Activo' : 'Inactivo'}
+                    </td>
+                `;
+
+                cuerpoTabla.appendChild(fila);
+            });
+
+            document.getElementById('mensaje-error').innerText = '';
+
+        } catch (error) {
+            document.getElementById('mensaje-error').innerText =
+                'No se pudo conectar con el servidor.';
+        }
+    }
+    setInterval(actualizarPantalla, 2000);
+    actualizarPantalla();
+</script>
+</body>
+</html>
