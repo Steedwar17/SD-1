@@ -1,0 +1,577 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coordinador 55223025</title>
+<style>
+:root {
+    --bg-0: #f5f6f8;
+    --bg-1: #ffffff;
+    --ink-1: #111214;
+    --ink-2: #4b515b;
+    --line: #dde2e9;
+    --accent: #0071e3;
+    --accent-2: #2997ff;
+    --danger: #d30f2f;
+    --ok: #0a9e63;
+    --shadow-soft: 0 10px 35px rgba(17, 18, 20, 0.08);
+    --shadow-card: 0 20px 44px rgba(17, 18, 20, 0.12);
+    --radius-xl: 28px;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink-1);
+    background:
+        radial-gradient(1200px 500px at 12% -5%, rgba(41, 151, 255, 0.22), transparent 55%),
+        radial-gradient(1000px 500px at 88% 0%, rgba(10, 158, 99, 0.12), transparent 55%),
+        linear-gradient(180deg, #f8f9fb 0%, #f0f3f7 100%);
+    padding: 34px 20px 44px;
+}
+
+.main-wrap {
+    width: min(1220px, 100%);
+    margin: 0 auto;
+    animation: fadeIn 0.55s ease;
+}
+
+.hero {
+    margin-bottom: 24px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+.hero p {
+    margin: 8px 0 0;
+    color: var(--ink-2);
+    font-size: clamp(1rem, 1.8vw, 1.1rem);
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(18px);
+}
+
+.metrics-card {
+    padding: 26px;
+    margin-bottom: 22px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.metric {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9));
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+}
+
+.metric-label {
+    display: block;
+    color: var(--ink-2);
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+}
+
+.metric-value {
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+    font-weight: 620;
+    letter-spacing: -0.02em;
+}
+
+.metric-estado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.estado-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.estado-primario {
+    color: var(--ok);
+    font-weight: 700;
+}
+
+.estado-backup {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+.estado-primario + .estado-dot {
+    background: var(--ok);
+}
+
+.estado-backup + .estado-dot {
+    background: var(--danger);
+}
+
+.panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+}
+
+.panel h3 {
+    margin: 0 0 16px;
+    font-size: 1.28rem;
+    letter-spacing: -0.01em;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+th {
+    text-align: left;
+    font-weight: 620;
+    padding: 13px 14px;
+    color: #1d1f23;
+    background: #f6f8fb;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+}
+
+td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #eceff4;
+    color: #2a2e35;
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: #f8fbff;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 580;
+}
+
+a:hover {
+    color: #0062c2;
+}
+
+.backup-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+input {
+    flex: 1;
+    min-width: 170px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: var(--ink-1);
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 4px rgba(41, 151, 255, 0.2);
+    outline: none;
+}
+
+button {
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 620;
+    padding: 10px 14px;
+    transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.2s ease;
+    color: #fff;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.98);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button[onclick="registrarBackup()"] {
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    box-shadow: 0 8px 18px rgba(0, 113, 227, 0.3);
+    padding-inline: 18px;
+}
+
+button[onclick^="forzarSync"] {
+    background: linear-gradient(180deg, #30b0ff, #0f84e7);
+}
+
+button[onclick^="eliminarBackup"] {
+    background: linear-gradient(180deg, #ff5d6f, #d30f2f);
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-group button {
+    flex: 1 1 108px;
+}
+
+.punto-online {
+    color: var(--ok);
+    font-size: 1.1rem;
+}
+
+.punto-offline {
+    color: var(--danger);
+    font-size: 1.1rem;
+}
+
+.toast-stack {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.toast {
+    min-width: 360px;
+    max-width: min(92vw, 560px);
+    padding: 22px 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 16px 36px rgba(17, 18, 20, 0.2);
+    backdrop-filter: blur(14px);
+    font-size: 1.1rem;
+    line-height: 1.35;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.toast.error {
+    background: linear-gradient(130deg, rgba(211, 15, 47, 0.92), rgba(148, 0, 39, 0.94));
+}
+
+.toast-title {
+    display: block;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1080px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+    }
+
+    .panels {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 24px 12px 30px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel,
+    .metrics-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .backup-actions {
+        flex-direction: column;
+    }
+
+    button[onclick="registrarBackup()"] {
+        width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+<div class="main-wrap">
+    <section class="hero">
+        <h1>Coordinador 55223025</h1>
+        <p>Panel de monitoreo en tiempo real de workers y backups.</p>
+    </section>
+
+    <section class="card metrics-card">
+        <div class="metrics-grid">
+            <div class="metric">
+                <span class="metric-label">Total Workers</span>
+                <span class="metric-value" id="totalWorkers">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Total Backups</span>
+                <span class="metric-value" id="totalBackups">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Total Timeouts</span>
+                <span class="metric-value" id="totalTimeouts">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Timestamp Sistema</span>
+                <span class="metric-value" id="timestampSistema">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Estado</span>
+                <span class="metric-value metric-estado">
+                    <span id="estado"></span>
+                    <span class="estado-dot"></span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section class="panels">
+        <div class="card panel">
+            <h3>Workers Activos</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>ID</th>
+                            <th>URL</th>
+                            <th>Ultimo Pulso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaWorkers"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card panel">
+            <h3>Backups Conocidos</h3>
+            <div class="backup-actions">
+                <input type="text" id="urlBackup" placeholder="https://otro.ngrok-free.dev">
+                <button onclick="registrarBackup()">Registrar</button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>URL</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBackups"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+let toastHideTimer
+
+function mostrarAlertaBonita(mensaje) {
+    const stack = document.getElementById("toastStack")
+    const toast = document.createElement("div")
+    toast.className = "toast error"
+    toast.innerHTML = `
+        <span class="toast-title">Error de registro</span>
+        <span>${mensaje}</span>
+    `
+
+    stack.innerHTML = ""
+    stack.appendChild(toast)
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show")
+    })
+
+    clearTimeout(toastHideTimer)
+    toastHideTimer = setTimeout(() => {
+        toast.classList.remove("show")
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove()
+            }
+        }, 220)
+    }, 2800)
+}
+
+async function actualizarPantalla() {
+    const resMetricas = await fetch("/metrics")
+    const datosMetricas = await resMetricas.json()
+
+    document.getElementById("totalWorkers").innerText = datosMetricas.totalWorkers
+    document.getElementById("totalBackups").innerText = datosMetricas.totalBackups
+    document.getElementById("totalTimeouts").innerText = datosMetricas.totalTimeouts
+    document.getElementById("timestampSistema").innerText =
+        new Date(datosMetricas.timestampSistema).toLocaleString()
+
+    const estado = document.getElementById("estado")
+    estado.innerText = datosMetricas.esPrimario ? "Primario" : "Backup"
+    estado.className = datosMetricas.esPrimario ? "estado-primario" : "estado-backup"
+
+    const resWorkers = await fetch("/servers")
+    const workers = await resWorkers.json()
+
+    const tablaWorkers = document.getElementById("tablaWorkers")
+    tablaWorkers.innerHTML = ""
+
+    workers.forEach(w => {
+        const ultimoPulso = Date.now() - w.lastPulse
+        const conectado = ultimoPulso < 4000
+        const punto = conectado
+            ? '<span class="punto-online">●</span>'
+            : '<span class="punto-offline">●</span>'
+
+        tablaWorkers.innerHTML += `
+            <tr>
+                <td>${punto} ${w.nombre}</td>
+                <td>${w.id}</td>
+                <td>
+                    <a href="${w.url}" target="_blank">${w.url}</a>
+                </td>
+                <td>${ultimoPulso} ms</td>
+            </tr>
+        `
+    })
+
+    const resBackups = await fetch("/backups")
+    const backups = await resBackups.json()
+
+    const tablaBackups = document.getElementById("tablaBackups")
+    tablaBackups.innerHTML = ""
+
+    backups.forEach(b => {
+        tablaBackups.innerHTML += `
+            <tr>
+                <td>${b.nombre}</td>
+                <td>${b.url}</td>
+                <td><div class="btn-group">
+                    <button onclick="forzarSync('${b.url}')">Sincronizar</button>
+                    <button onclick="eliminarBackup('${b.url}')">Eliminar</button>
+                </div></td>
+            </tr>
+        `
+    })
+}
+
+async function registrarBackup() {
+    const url = document.getElementById("urlBackup").value.trim()
+    if (!url) return
+
+    const respuesta = await fetch("/register-backup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+    })
+
+    const resultado = await respuesta.json().catch(() => ({}))
+
+    if (!respuesta.ok) {
+        mostrarAlertaBonita("No se puede registrar este backup porque su url esta mal")
+        return
+    }
+
+    document.getElementById("urlBackup").value = ""
+    actualizarPantalla()
+}
+
+async function eliminarBackup(url) {
+    await fetch("/delete-backup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+    })
+
+    actualizarPantalla()
+}
+
+async function forzarSync(url) {
+    await fetch("/forzar-sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+    })
+
+    actualizarPantalla()
+}
+
+setInterval(actualizarPantalla, 2000)
+actualizarPantalla()
+</script>
+</body>
+</html>
